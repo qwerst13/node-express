@@ -17,6 +17,32 @@ class Course {
         })
     }
 
+    static async getById(id) {
+        const courses = await Course.getAll();
+
+        return courses.find((item) => item.id === id);
+    }
+
+    static async edit(course) {
+        const courses = await Course.getAll();
+
+        const coursesEdited = courses.map((item) => {
+            return item.id === course.id ? course : item;
+        });
+
+        return new Promise((resolve, reject) => {
+            fs.writeFile(
+                path.join(__dirname, '..', 'data', 'courses.json'),
+                JSON.stringify(coursesEdited),
+                (err) => {
+                    if (err) reject (err);
+
+                    else resolve();
+                }
+            );
+        });
+    }
+
     constructor(title, price, img) {
         this.title = title;
         this.price = price;
@@ -47,8 +73,10 @@ class Course {
                     else resolve();
                 }
             );
-        })
+        });
     }
+
+
 }
 
 module.exports = Course;

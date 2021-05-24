@@ -21,6 +21,12 @@
         <li><a href="/add">Add course</a></li>
       {{/if}}
 
+      {{#if isCart}}
+        <li class="active"><a href="/cart"><i class="material-icons">shopping_cart</i></a></li>
+      {{else}}
+        <li><a href="/cart"><i class="material-icons">shopping_cart</i></a></li>
+      {{/if}}
+
     </ul>
   </div>
 </nav>
