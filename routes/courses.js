@@ -48,10 +48,6 @@ router.get('/:id', async (req, res) => {
     else {
         res.render('404', {title: 'Page not found'});
     }
-
-
-
-
 });
 
 module.exports = router;
