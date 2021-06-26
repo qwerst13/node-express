@@ -37,3 +37,10 @@
 .cart-button span {
   margin: 0 1rem;
 }
+.edit-button {
+ display: inline-block;
+}
+.remove-button {
+  display: inline-block;
+  margin-left: 10px;
+}
