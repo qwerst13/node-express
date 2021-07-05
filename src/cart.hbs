@@ -26,6 +26,10 @@
 
     </table>
     <p><b>Total price: </b><span class="price">{{totalPrice}}</span></p>
+
+    <form action="/orders" method="POST">
+      <button type="submit" class="btn">Make order</button>
+    </form>
   {{else}}
     <p>Cart is empty</p>
   {{/if}}

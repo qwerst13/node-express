@@ -4,7 +4,11 @@ const Course = require('../models/course');
 const router = Router();
 
 router.get('/', async (req, res) => {
-   const courses = await Course.find();
+    // populate - expand ObjectId that we get from Course model, there we have ref on User model
+    // select - get only arguments that we choose, all other ignored
+   const courses = await Course.find()
+       .populate('userId', 'email name')
+       .select('price title img');
 
     res.render('courses', {
         title: 'Add course',
