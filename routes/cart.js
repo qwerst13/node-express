@@ -1,53 +1,53 @@
-const {Router} = require('express');
+const { Router } = require("express");
 
-const Course = require('../models/course');
-const User = require('../models/user')
+const Course = require("../models/course");
+const User = require("../models/user");
 const router = Router();
 
 function mapCartItem(cart) {
-    return cart.items.map((item) => ({
-        ...item.courseId._doc,
-        id: item.courseId.id,
-        count: item.count
-    }))
+  return cart.items.map((item) => ({
+    ...item.courseId._doc,
+    id: item.courseId.id,
+    count: item.count,
+  }));
 }
 
 function calculateTotalPrice(courses) {
-    return courses.reduce((acc, curr) => (acc + curr.count * curr.price), 0)
+  return courses.reduce((acc, curr) => acc + curr.count * curr.price, 0);
 }
 
-router.get('/', async (req, res) => {
-    const user = await req.user.populate('cart.items.courseId').execPopulate();
+router.get("/", async (req, res) => {
+  const user = await req.user.populate("cart.items.courseId").execPopulate();
 
-    const courses = mapCartItem(user.cart);
+  const courses = mapCartItem(user.cart);
 
-    res.render('cart', {
-        title: 'Cart',
-        isCart: true,
-        courses: courses,
-        totalPrice: calculateTotalPrice(courses)
-    });
+  res.render("cart", {
+    title: "Cart",
+    isCart: true,
+    courses: courses,
+    totalPrice: calculateTotalPrice(courses),
+  });
 });
 
-router.post('/add', async (req, res) => {
-    const course = await Course.findById(req.body.id);
+router.post("/add", async (req, res) => {
+  const course = await Course.findById(req.body.id);
 
-    await req.user.addToCart(course);
+  await req.user.addToCart(course);
 
-    res.redirect('/cart');
+  res.redirect("/cart");
 });
 
-router.delete('/remove/:id', async (req, res) => {
+router.delete("/remove/:id", async (req, res) => {
   await req.user.removeFromCart(req.params.id);
 
-  const user = await req.user.populate('cart.items.courseId').execPopulate();
+  const user = await req.user.populate("cart.items.courseId").execPopulate();
   const courses = mapCartItem(user.cart);
   const cart = {
-      courses,
-      totalPrice: calculateTotalPrice(courses)
-  }
+    courses,
+    totalPrice: calculateTotalPrice(courses),
+  };
 
-    res.status(200).json(cart);
+  res.status(200).json(cart);
 });
 
 module.exports = router;

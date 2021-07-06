@@ -1,52 +1,54 @@
-const {Router} = require('express');
-const Order = require('../models/order');
+const { Router } = require("express");
+const Order = require("../models/order");
 
 const router = Router();
 
-router.get('/', async (req, res) => {
-    try {
-        const orders = await Order.find({
-            'user.userId': req.user._id
-        })
-            .populate('user.userId');
- console.log(orders);
-        res.render('orders', {
-            isOrder: true,
-            title: 'Orders',
-            orders: orders.map((item) => ({
-                ...item._doc,
-                price: item.courses.reduce((acc, curr) => (acc + curr.count*curr.course.totalPrice), 0)
-            }))
-        });
-    } catch (e) {
-        console.log('routes/orders:get', e)
-    }
+router.get("/", async (req, res) => {
+  try {
+    const orders = await Order.find({
+      "user.userId": req.user._id,
+    }).populate("user.userId");
+    console.log(orders);
+    res.render("orders", {
+      isOrder: true,
+      title: "Orders",
+      orders: orders.map((item) => ({
+        ...item._doc,
+        price: item.courses.reduce(
+          (acc, curr) => acc + curr.count * curr.course.totalPrice,
+          0
+        ),
+      })),
+    });
+  } catch (e) {
+    console.log("routes/orders:get", e);
+  }
 });
 
-router.post('/', async (req, res) => {
-    try {
-        const user = await req.user.populate('cart.items.courseId').execPopulate();
+router.post("/", async (req, res) => {
+  try {
+    const user = await req.user.populate("cart.items.courseId").execPopulate();
 
-        const courses = user.cart.items.map((item) => ({
-            count: item.count,
-            course: {...item.courseId._doc}
-        }));
+    const courses = user.cart.items.map((item) => ({
+      count: item.count,
+      course: { ...item.courseId._doc },
+    }));
 
-        const order = new Order({
-            user: {
-                name: req.user.name,
-                userId: req.user
-            },
-            courses
-        });
+    const order = new Order({
+      user: {
+        name: req.user.name,
+        userId: req.user,
+      },
+      courses,
+    });
 
-        await order.save();
-        await req.user.clearCart();
+    await order.save();
+    await req.user.clearCart();
 
-        res.redirect('/orders');
-    } catch (e) {
-        console.log('routes/orders:post', e);
-    }
-})
+    res.redirect("/orders");
+  } catch (e) {
+    console.log("routes/orders:post", e);
+  }
+});
 
 module.exports = router;
