@@ -1,3 +1,6 @@
 # node-express
 
-Basic of NodeJS + Express (handlebars)
+Courses shop.
+Used NodeJS + Express (handlebars)
+
+currently not deployed...
