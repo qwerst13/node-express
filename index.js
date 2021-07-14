@@ -2,10 +2,9 @@ const express = require("express");
 const path = require("path");
 const Handlebars = require("handlebars");
 const exphbs = require("express-handlebars");
+const session = require("express-session");
 const mongoose = require("mongoose");
-const {
-  allowInsecurePrototypeAccess,
-} = require("@handlebars/allow-prototype-access");
+const {allowInsecurePrototypeAccess} = require("@handlebars/allow-prototype-access");
 
 const homeRoute = require("./routes/home");
 const addRoute = require("./routes/add");
@@ -15,6 +14,7 @@ const notFoundRoute = require("./routes/404");
 const ordersRoute = require("./routes/orders");
 const authRoute = require("./routes/auth")
 const User = require("./models/user");
+const variablesMiddleware = require("./middleware/variables")
 
 require("dotenv").config();
 
@@ -42,6 +42,12 @@ app.use(async (req, res, next) => {
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
+app.use(session({
+  secret: 'some secret string',
+  resave: false,
+  saveUninitialized: false
+}));
+app.use(variablesMiddleware);
 
 app.use("/", homeRoute);
 app.use("/courses", coursesRoute);
