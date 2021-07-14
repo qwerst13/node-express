@@ -13,6 +13,7 @@ const cartRoute = require("./routes/cart");
 const coursesRoute = require("./routes/courses");
 const notFoundRoute = require("./routes/404");
 const ordersRoute = require("./routes/orders");
+const authRoute = require("./routes/auth")
 const User = require("./models/user");
 
 require("dotenv").config();
@@ -41,12 +42,14 @@ app.use(async (req, res, next) => {
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
+
 app.use("/", homeRoute);
 app.use("/courses", coursesRoute);
 app.use("/add", addRoute);
 app.use("/cart", cartRoute);
 app.use("/404", notFoundRoute);
 app.use("/orders", ordersRoute);
+app.use("/auth", authRoute);
 
 const PORT = process.env.PORT || 8000;
 

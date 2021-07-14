@@ -44,3 +44,7 @@
   display: inline-block;
   margin-left: 10px;
 }
+
+.auth {
+  padding-top: 1rem;
+}

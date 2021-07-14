@@ -34,6 +34,12 @@
         <li><a href="/orders">Orders</a></li>
       {{/if}}
 
+      {{#if isLogin}}
+        <li class="active"><a href="/auth/login#login"><i class="material-icons">account_circle</i></a></li>
+      {{else}}
+        <li><a href="/auth/login#login"><i class="material-icons">account_circle</i></a></li>
+      {{/if}}
+
     </ul>
   </div>
 </nav>
