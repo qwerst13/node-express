@@ -14,8 +14,9 @@ const coursesRoute = require("./routes/courses");
 const notFoundRoute = require("./routes/404");
 const ordersRoute = require("./routes/orders");
 const authRoute = require("./routes/auth")
-const User = require("./models/user");
-const variablesMiddleware = require("./middleware/variables")
+
+const variablesMiddleware = require("./middleware/variables");
+const userMiddleware = require("./middleware/user");
 
 require("dotenv").config();
 
@@ -44,7 +45,9 @@ app.use(session({
   saveUninitialized: false,
   store
 }));
+
 app.use(variablesMiddleware);
+app.use(userMiddleware);
 
 app.use("/", homeRoute);
 app.use("/courses", coursesRoute);
