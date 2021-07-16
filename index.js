@@ -3,6 +3,7 @@ const path = require("path");
 const Handlebars = require("handlebars");
 const exphbs = require("express-handlebars");
 const session = require("express-session");
+const MongoStore = require("connect-mongodb-session")(session);
 const mongoose = require("mongoose");
 const {allowInsecurePrototypeAccess} = require("@handlebars/allow-prototype-access");
 
@@ -26,6 +27,11 @@ const hbs = exphbs.create({
   handlebars: allowInsecurePrototypeAccess(Handlebars),
 });
 
+const store = new MongoStore({
+  collection: 'sessions',
+  uri: process.env.MONGODB_URI
+})
+
 app.engine("hbs", hbs.engine);
 app.set("view engine", "hbs");
 app.set("views", "src");
@@ -35,7 +41,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(session({
   secret: 'some secret string',
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  store
 }));
 app.use(variablesMiddleware);
 
@@ -50,28 +57,13 @@ app.use("/auth", authRoute);
 const PORT = process.env.PORT || 8000;
 
 (async function () {
-  const user = process.env.USER;
-  const password = process.env.PASSWORD;
-
-  const url = `mongodb+srv://${user}:${password}@freecluster.mbgfb.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 
   try {
-    await mongoose.connect(url, {
+    await mongoose.connect(process.env.MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useFindAndModify: false,
     });
-
-    // const candidate = await User.findOne();
-
-    // if (!candidate) {
-    //   const user = new User({
-    //     name: "admin",
-    //     email: "admin@mail.com",
-    //     cart: { items: [] },
-    //   });
-    //   await user.save();
-    // }
 
     app.listen(PORT, () => {
       console.log(`server is running on port ${PORT}`);
