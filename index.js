@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const csurf = require("csurf");
+const connectFlash = require("connect-flash");
 const Handlebars = require("handlebars");
 const exphbs = require("express-handlebars");
 const session = require("express-session");
@@ -46,7 +47,9 @@ app.use(session({
   saveUninitialized: false,
   store
 }));
+
 app.use(csurf());
+app.use(connectFlash());
 
 app.use(variablesMiddleware);
 app.use(userMiddleware);
