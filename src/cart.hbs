@@ -21,6 +21,7 @@
               <button
                 class="btn btn-small js-remove material-icons"
                 data-id="{{id}}"
+                data-token="{{@root.csrf}}"
               >clear</button>
             </td>
           </tr>
@@ -31,6 +32,7 @@
     <p><b>Total price: </b><span class="price">{{totalPrice}}</span></p>
 
     <form action="/orders" method="POST">
+      <input type="hidden" name="_csrf" value="{{csrf}}">
       <button type="submit" class="btn">Make order</button>
     </form>
   {{else}}
