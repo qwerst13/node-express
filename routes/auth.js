@@ -26,7 +26,21 @@ router.post('/login', async (req, res) => {
 });
 
 router.post('/signup', async (req, res) => {
+  try {
+    const {email, password, repeat, name} = req.body;
 
+    const candidate = await User.findOne({email});
+
+    if (candidate) {
+      res.redirect('/auth/login#login');
+    } else {
+      const user = new User({ email, name, password, cart: {items: []} });
+      await user.save();
+      res.redirect('/auth/login#login')
+    }
+  } catch(e) {
+    console.log('routes/auth:post-signup', e);
+  }
 });
 
 module.exports = router;
