@@ -29,7 +29,7 @@ const $cart = document.querySelector("#cart");
 if ($cart) {
   $cart.addEventListener("click", (evt) => {
     if (evt.target.classList.contains("js-remove")) {
-      const {id, token} = evt.target.dataset;
+      const { id, token } = evt.target.dataset;
 
       fetch("/cart/remove/" + id, {
         method: "delete",
