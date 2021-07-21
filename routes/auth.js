@@ -89,7 +89,7 @@ router.post('/reset', (req, res) => {
   const { email } = req.body;
   
   try {
-    crypto.randomBytes(32, async (err, buffer) => {
+    crypto.randomBytes(32, async (e, buffer) => {
       if (e) {
         req.flash('error', 'Something went wrong, please try again later...')
         return res.redirect('/auth/reset');
@@ -144,8 +144,29 @@ const { token } = req.params;
   }
 });
 
-router.post('/password', (req, res) => {
+router.post('/password', async (req, res) => {
+  const { userId, token } = req.body;
+  try {
+    const user = await User.findOne({
+      _id: userId,
+      resetToken: token,
+      resetTokenExp: {$gt: Date.now()}
+    });
 
+    if (user) {
+      user.password = await bcrypt.hash(req.body.password, 10);
+      user.resetToken = undefined;
+      user.resetTokenExp = undefined;
+      await user.save();
+
+      res.redirect('/auth/login#login');
+    } else {
+      req.flash('loginError', 'Password reset time expired')
+      res.redirect('/auth/login#login')
+    }
+  } catch (e) {
+    console.log('routes/auth:post-password', e);
+  }
 });
 
 module.exports = router;
