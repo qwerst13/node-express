@@ -1,18 +1,21 @@
 const { Router } = require("express");
 const Course = require("../models/course");
-const auth = require("../middleware/auth ");
+const auth = require("../middleware/auth");
 const router = Router();
 
+function isOwner(course, req) {
+  return course.userId.toString() === req.user._id.toString();
+}
+
 router.get("/", async (req, res) => {
-  // populate - expand ObjectId that we get from Course model, there we have ref on User model
-  // select - get only arguments that we choose, all other ignored
   const courses = await Course.find()
     .populate("userId", "email name")
     .select("price title img");
 
   res.render("courses", {
-    title: "Add course",
+    title: "Courses",
     isCourses: true,
+    userId: req.user ? req.user._id.toString() : null,
     courses,
   });
 });
@@ -20,21 +23,34 @@ router.get("/", async (req, res) => {
 router.get("/:id/edit", auth, async (req, res) => {
   if (!req.query.allow) {
     return res.redirect("/");
-  } else {
-    const course = await Course.findById(req.params.id);
-
-    res.render("course-edit", {
-      isCourses: true,
-      course,
-    });
   }
+
+  const course = await Course.findById(req.params.id);
+
+  if (!isOwner(course, req)) {
+    return res.redirect('/courses')
+  }
+
+  res.render("course-edit", {
+    title: `Edit ${course.title}`,
+    isCourses: true,
+    course,
+  });
+
 });
 
 router.post("/edit", auth, async (req, res) => {
   const { id } = req.body;
+  const course = await Course.findById(id);
+
+  if (!isOwner(course, req)) {
+    return res.redirect('/courses')
+  }
+
   delete req.body.id; // mongoDB use native variable _id, so we didn't want that our id get into collection
 
-  await Course.findByIdAndUpdate(id, req.body);
+  Object.assign(course, req.body);
+  await course.save();
 
   res.redirect("/courses");
 });
@@ -57,7 +73,10 @@ router.post("/remove", auth, async (req, res) => {
   const { id } = req.body;
 
   try {
-    await Course.findByIdAndDelete(id);
+    await Course.deleteOne({
+      _id: id,
+      userId: req.user._id
+    });
     res.redirect("/courses");
   } catch (e) {
     console.log("courses: router.post(/remove)", e);

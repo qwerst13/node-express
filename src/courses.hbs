@@ -17,7 +17,11 @@
             <a href="/courses/{{id}}" target="_blank">Open cource</a>
 
             {{#if @root.isAuth}}
-              <a href="/courses/{{id}}/edit?allow=true">Edit course</a>
+
+              {{#ifeq userId._id @root.userId}}
+                <a href="/courses/{{id}}/edit?allow=true">Edit course</a>
+              {{/ifeq}}
+
               <form action="/cart/add" method="post">
                 <input type="hidden" name="id" value="{{id}}" />
                 <input type="hidden" name="_csrf" value="{{@root.csrf}}">

@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const Course = require("../models/course");
-const auth = require("../middleware/auth ");
+const auth = require("../middleware/auth");
 const router = Router();
 
 router.get("/", auth, (req, res) => {
