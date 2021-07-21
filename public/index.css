@@ -57,3 +57,14 @@
   background: rgba(255, 0, 0, 0.3);
   color: darkred;
 }
+
+.login-actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.login-actions > p {
+  font-size: small;
+  margin-left: 1rem;
+}

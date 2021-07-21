@@ -7,7 +7,7 @@ module.exports = function(email) {
       <h1>Welcome to our shop</h1>
       <p>You're sussesfully registered. Enjoy.</p>
       <hr/>
-      <a href="${process.env.BASE_URL}>---> Start shopping <---</a>"
+      <a href="${process.env.BASE_URL}">---> Start shopping <---</a>
     `
   }
 

@@ -22,8 +22,6 @@ const authRoute = require("./routes/auth")
 const variablesMiddleware = require("./middleware/variables");
 const userMiddleware = require("./middleware/user");
 
-
-
 const app = express();
 
 const hbs = exphbs.create({
