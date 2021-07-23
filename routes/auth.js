@@ -59,7 +59,8 @@ router.post('/login', async (req, res) => {
 
 router.post('/signup', async (req, res) => {
   try {
-    const { email, password, repeat, name } = req.body;
+    const { email, password, confirm, name } = req.body;
+    console.log(req.body);
     const candidate = await User.findOne({ email });
 
     if (candidate) {
