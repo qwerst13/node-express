@@ -2,11 +2,13 @@ const { Router } = require('express');
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
+const {validationResult} = require('express-validator');
 const nodemailer = require('nodemailer');
 const sendgrid = require('nodemailer-sendgrid-transport');
 const router = Router();
 const signupEmail = require('../emails/signup');
 const resetEmail = require('../emails/reset');
+const {signupValidators} = require('../utils/validators');
 
 const api_key = process.env.SENDGRID_API_KEY;
 const transport = nodemailer.createTransport(sendgrid({
@@ -57,20 +59,26 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.post('/signup', async (req, res) => {
+router.post('/signup', signupValidators, async (req, res) => {
   try {
-    const { email, password, confirm, name } = req.body;
-    console.log(req.body);
-    const candidate = await User.findOne({ email });
+    const {email, password, confirm, name} = req.body;
+    const candidate = await User.findOne({email});
+
+    const validationErrors = validationResult(req);
+
+    if (!validationErrors.isEmpty()) {
+      req.flash('signupError', validationErrors.array()[0].msg);
+      return res.status(422).redirect('/auth/login#signup');
+    }
 
     if (candidate) {
       req.flash('signupError', 'This e-mail already taken');
       res.redirect('/auth/login#signup');
     } else {
       const hashPassrord = await bcrypt.hash(password, 10)
-      const user = new User({ email, name, password: hashPassrord, cart: { items: [] } });
+      const user = new User({email, name, password: hashPassrord, cart: {items: []}});
       await user.save();
-      
+
       await transport.sendMail(signupEmail(email));
       res.redirect('/auth/login#login');
     }
