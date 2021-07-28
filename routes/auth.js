@@ -8,7 +8,7 @@ const sendgrid = require('nodemailer-sendgrid-transport');
 const router = Router();
 const signupEmail = require('../emails/signup');
 const resetEmail = require('../emails/reset');
-const {signupValidators} = require('../utils/validators');
+const { signupValidators, loginValidatiors } = require('../utils/validators');
 
 const api_key = process.env.SENDGRID_API_KEY;
 const transport = nodemailer.createTransport(sendgrid({
@@ -30,30 +30,24 @@ router.get('/logout', async (req, res) => {
   })
 });
 
-router.post('/login', async (req, res) => {
+router.post('/login', loginValidatiors, async (req, res) => {
+  const { email } = req.body;
+
   try {
-    const { email, password } = req.body;
-    const candidate = await User.findOne({ email });
+    const validationErrors = validationResult(req);
 
-    if (candidate) {
-      const isCorrect = await bcrypt.compare(password, candidate.password);
-
-      if (isCorrect) {
-        req.session.user = candidate;
-        req.session.isAuthenticated = true;
-        req.session.save((err) => {
-          if (err) throw err;
-          else res.redirect('/');
-        });
-
-      } else {
-        req.flash('loginError', 'Wrong password')
-        res.redirect('/auth/login#login');
-      }
-    } else {
-      req.flash('loginError', 'User with this email does not exist');
-      res.redirect('/auth/login#login');
+    if (!validationErrors.isEmpty()) {
+      req.flash('loginError', validationErrors.array()[0].msg);
+      return res.status(422).redirect('/auth/login#login');
     }
+
+    req.session.user = await User.findOne({ email });
+    req.session.isAuthenticated = true;
+    req.session.save((err) => {
+      if (err) throw err;
+      else res.redirect('/');
+    });
+
   } catch (e) {
     console.log('routes/auth:post-login', e);
   }
