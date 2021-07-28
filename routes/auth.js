@@ -61,8 +61,7 @@ router.post('/login', async (req, res) => {
 
 router.post('/signup', signupValidators, async (req, res) => {
   try {
-    const {email, password, confirm, name} = req.body;
-    const candidate = await User.findOne({email});
+    const {email, password, name} = req.body;
 
     const validationErrors = validationResult(req);
 
@@ -71,17 +70,13 @@ router.post('/signup', signupValidators, async (req, res) => {
       return res.status(422).redirect('/auth/login#signup');
     }
 
-    if (candidate) {
-      req.flash('signupError', 'This e-mail already taken');
-      res.redirect('/auth/login#signup');
-    } else {
-      const hashPassrord = await bcrypt.hash(password, 10)
-      const user = new User({email, name, password: hashPassrord, cart: {items: []}});
-      await user.save();
+    const hashPassword = await bcrypt.hash(password, 10)
+    const user = new User({email, name, password: hashPassword, cart: {items: []}});
+    await user.save();
 
-      await transport.sendMail(signupEmail(email));
-      res.redirect('/auth/login#login');
-    }
+    await transport.sendMail(signupEmail(email));
+    res.redirect('/auth/login#login');
+
   } catch (e) {
     console.log('routes/auth:post-signup', e);
   }
