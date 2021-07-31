@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model } = require('mongoose');
 
 const userSchema = new Schema({
   name: {
@@ -25,7 +25,7 @@ const userSchema = new Schema({
         },
         courseId: {
           type: Schema.Types.ObjectId,
-          ref: "Course",
+          ref: 'Course',
           required: true,
         },
       },
@@ -36,9 +36,7 @@ const userSchema = new Schema({
 userSchema.methods.addToCart = function (course) {
   const items = [...this.cart.items];
 
-  const index = items.findIndex(
-    (courses) => courses.courseId.toString() === course._id.toString()
-  );
+  const index = items.findIndex((courses) => courses.courseId.toString() === course._id.toString());
 
   if (index >= 0) {
     items[index].count = items[index].count + 1;
@@ -55,14 +53,10 @@ userSchema.methods.addToCart = function (course) {
 
 userSchema.methods.removeFromCart = function (id) {
   let items = [...this.cart.items];
-  const index = items.findIndex(
-    (courses) => courses.courseId.toString() === id.toString()
-  );
+  const index = items.findIndex((courses) => courses.courseId.toString() === id.toString());
 
   if (items[index].count === 1) {
-    items = items.filter(
-      (courses) => courses.courseId.toString() !== id.toString()
-    );
+    items = items.filter((courses) => courses.courseId.toString() !== id.toString());
   } else {
     items[index].count--;
   }
@@ -79,4 +73,4 @@ userSchema.methods.clearCart = function () {
   return this.save();
 };
 
-module.exports = model("User", userSchema);
+module.exports = model('User', userSchema);

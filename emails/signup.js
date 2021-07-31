@@ -1,4 +1,4 @@
-module.exports = function(email) {
+module.exports = function (email) {
   const obj = {
     to: email,
     from: process.env.EMAIL_FROM,
@@ -8,8 +8,8 @@ module.exports = function(email) {
       <p>You're sussesfully registered. Enjoy.</p>
       <hr/>
       <a href="${process.env.BASE_URL}">---> Start shopping <---</a>
-    `
-  }
+    `,
+  };
 
   return obj;
-}
+};

@@ -1,23 +1,23 @@
 const toCurrency = (price) => {
-  return new Intl.NumberFormat("en-US", {
-    currency: "usd",
-    style: "currency",
+  return new Intl.NumberFormat('en-US', {
+    currency: 'usd',
+    style: 'currency',
   }).format(price);
 };
 
 const toDate = (date) => {
-  console.log(date)
+  console.log(date);
   return new Intl.DateTimeFormat('en-US', {
     day: '2-digit',
     month: 'long',
     year: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
-    second: '2-digit'
-  }).format(new Date(date))
-}
+    second: '2-digit',
+  }).format(new Date(date));
+};
 
-document.querySelectorAll(".price").forEach((item) => {
+document.querySelectorAll('.price').forEach((item) => {
   item.textContent = toCurrency(item.textContent);
 });
 
@@ -25,17 +25,17 @@ document.querySelectorAll('.date').forEach((item) => {
   item.textContent = toDate(item.textContent);
 });
 
-const $cart = document.querySelector("#cart");
+const $cart = document.querySelector('#cart');
 if ($cart) {
-  $cart.addEventListener("click", (evt) => {
-    if (evt.target.classList.contains("js-remove")) {
+  $cart.addEventListener('click', (evt) => {
+    if (evt.target.classList.contains('js-remove')) {
       const { id, token } = evt.target.dataset;
 
-      fetch("/cart/remove/" + id, {
-        method: "delete",
+      fetch('/cart/remove/' + id, {
+        method: 'delete',
         headers: {
-          'X-XSRF-TOKEN': token
-        }
+          'X-XSRF-TOKEN': token,
+        },
       })
         .then((res) => res.json())
         .then((cart) => {
@@ -53,14 +53,12 @@ if ($cart) {
                               </tr>
                             `;
               })
-              .join("");
-            $cart.querySelector("tbody").innerHTML = html;
+              .join('');
+            $cart.querySelector('tbody').innerHTML = html;
 
-            $cart.querySelector(".price").textContent = toCurrency(
-              cart.totalPrice
-            );
+            $cart.querySelector('.price').textContent = toCurrency(cart.totalPrice);
           } else {
-            $cart.innerHTML = "<p>Cart is empty</p>";
+            $cart.innerHTML = '<p>Cart is empty</p>';
           }
         });
     }

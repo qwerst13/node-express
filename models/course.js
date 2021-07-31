@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model } = require('mongoose');
 
 const courseSchema = new Schema({
   title: {
@@ -12,11 +12,11 @@ const courseSchema = new Schema({
   img: String,
   userId: {
     type: Schema.Types.ObjectId,
-    ref: "User",
+    ref: 'User',
   },
 });
 
-courseSchema.method("toClient", function () {
+courseSchema.method('toClient', function () {
   const course = this.toObject();
 
   course.id = course._id;
@@ -25,4 +25,4 @@ courseSchema.method("toClient", function () {
   return course;
 });
 
-module.exports = model("Course", courseSchema);
+module.exports = model('Course', courseSchema);

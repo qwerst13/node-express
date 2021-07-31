@@ -1,4 +1,4 @@
-module.exports = function(email, token) {
+module.exports = function (email, token) {
   const obj = {
     to: email,
     from: process.env.EMAIL_FROM,
@@ -11,8 +11,8 @@ module.exports = function(email, token) {
       </ul>
       <p>If you didn't request this, please ignore this email.</p>
       <p>The CourseShop Team</p>
-    `
-  }
+    `,
+  };
 
   return obj;
-}
+};

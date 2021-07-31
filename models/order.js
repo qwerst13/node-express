@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model } = require('mongoose');
 
 const orderSchema = new Schema({
   courses: [
@@ -17,7 +17,7 @@ const orderSchema = new Schema({
     name: String,
     userId: {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true,
     },
   },
@@ -27,4 +27,4 @@ const orderSchema = new Schema({
   },
 });
 
-module.exports = model("Order", orderSchema);
+module.exports = model('Order', orderSchema);
