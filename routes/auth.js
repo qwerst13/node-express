@@ -8,7 +8,7 @@ const sendgrid = require('nodemailer-sendgrid-transport');
 const router = Router();
 const signupEmail = require('../emails/signup');
 const resetEmail = require('../emails/reset');
-const { signupValidators, loginValidatiors } = require('../utils/validators');
+const { signupValidators, loginValidators } = require('../utils/validators');
 
 const api_key = process.env.SENDGRID_API_KEY;
 const transport = nodemailer.createTransport(
@@ -32,7 +32,7 @@ router.get('/logout', async (req, res) => {
   });
 });
 
-router.post('/login', loginValidatiors, async (req, res) => {
+router.post('/login', loginValidators, async (req, res) => {
   const { email } = req.body;
 
   try {

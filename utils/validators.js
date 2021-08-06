@@ -32,7 +32,7 @@ exports.signupValidators = [
   body('name', 'Minimum name length need to be at least a value of 3').isLength({ min: 3 }).trim(),
 ];
 
-exports.loginValidatiors = [
+exports.loginValidators = [
   body('email', 'User with this email not existed')
     .normalizeEmail()
     .custom(async (value, { req }) => {
@@ -57,4 +57,14 @@ exports.loginValidatiors = [
         return Promise.reject('Wrong password');
       } else return true;
     }),
+];
+
+exports.courseValidators = [
+  body('title', 'Course name length need to be at least 3 char length')
+    .isLength({min: 3})
+    .trim(),
+  body('price', 'Price is not valid')
+    .isNumeric(),
+  body('img', 'Url is not valid')
+    .isURL()
 ];
