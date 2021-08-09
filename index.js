@@ -8,6 +8,7 @@ const session = require('express-session');
 const MongoStore = require('connect-mongodb-session')(session);
 const mongoose = require('mongoose');
 const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access');
+const errorHandler = require('./middleware/error');
 
 require('dotenv').config();
 
@@ -61,9 +62,9 @@ app.use('/', homeRoute);
 app.use('/courses', coursesRoute);
 app.use('/add', addRoute);
 app.use('/cart', cartRoute);
-app.use('/404', notFoundRoute);
 app.use('/orders', ordersRoute);
 app.use('/auth', authRoute);
+app.use (errorHandler);
 
 const PORT = process.env.PORT || 8000;
 

@@ -58,6 +58,13 @@
   color: darkred;
 }
 
+.full {
+  width: 100vw;
+  height: 100vh;
+  left: 0;
+  position: absolute;
+}
+
 .login-actions {
   display: flex;
   flex-direction: row;
