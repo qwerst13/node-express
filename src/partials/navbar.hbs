@@ -36,13 +36,19 @@
           <li><a href="/orders">Orders</a></li>
         {{/if}}
 
+        {{#if isProfile}}
+          <li class="active"><a href="/profile"><i class="material-icons">account_circle</i></a></li>
+        {{else}}
+         <li><a href="/profile"><i class="material-icons">account_circle</i></a></li>
+        {{/if}}
+
         <li><a href="/auth/logout"><i class="material-icons">exit_to_app</i></a></li>
 
       {{else}}
         {{#if isLogin}}
-          <li class="active"><a href="/auth/login#login"><i class="material-icons">account_circle</i></a></li>
+          <li class="active"><a href="/auth/login#login"></a>Enter on site</li>
         {{else}}
-         <li><a href="/auth/login#login"><i class="material-icons">account_circle</i></a></li>
+         <li><a href="/auth/login#login">Enter on site</a></li>
         {{/if}}
       {{/if}}
 
