@@ -9,6 +9,7 @@ const MongoStore = require('connect-mongodb-session')(session);
 const mongoose = require('mongoose');
 const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access');
 const errorHandler = require('./middleware/error');
+const fileMiddleware = require('./middleware/file');
 
 require('dotenv').config();
 
@@ -42,6 +43,7 @@ app.set('view engine', 'hbs');
 app.set('views', 'src');
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'images')));
 app.use(express.urlencoded({ extended: true }));
 app.use(
   session({
@@ -51,6 +53,8 @@ app.use(
     store,
   })
 );
+
+app.use(fileMiddleware.single('avatar'));
 
 app.use(csurf());
 app.use(connectFlash());

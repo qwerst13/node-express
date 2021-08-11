@@ -2,3 +2,5 @@
 /.idea
 /node_modules
 .env
+/images/*
+!/images/no-avatar.png
