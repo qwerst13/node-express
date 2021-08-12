@@ -60,7 +60,11 @@ app.use(fileMiddleware.single('avatar'));
 
 app.use(csurf());
 app.use(connectFlash());
-app.use(helmet());
+app.use(
+    helmet({
+      contentSecurityPolicy: false,
+    })
+);
 app.use(compression());
 
 app.use(variablesMiddleware);
