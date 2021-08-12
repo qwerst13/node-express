@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const Course = require('../models/course');
 const auth = require('../middleware/auth');
-const {courseValidators} = require('../utils/validators');
+const { courseValidators } = require('../utils/validators');
 const { validationResult } = require('express-validator');
 const router = Router();
 
