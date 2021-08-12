@@ -7,10 +7,7 @@ const storage = multer.diskStorage({
   filename(req, file, cb) {
     cb(
       null,
-      `${new Date()
-        .toISOString()
-        .split(/[-:.A-Z]/)
-        .join('')}-${file.originalname.split(/\s*/).join('')}`
+      `${new Date().toISOString().split(/[-:.A-Z]/).join('')}-${file.originalname.split(/\s*/).join('')}`
     );
   },
 });
