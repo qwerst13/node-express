@@ -60,11 +60,7 @@ exports.loginValidators = [
 ];
 
 exports.courseValidators = [
-  body('title', 'Course name length need to be at least 3 char length')
-    .isLength({min: 3})
-    .trim(),
-  body('price', 'Price is not valid')
-    .isNumeric(),
-  body('img', 'Url is not valid')
-    .isURL()
+  body('title', 'Course name length need to be at least 3 char length').isLength({ min: 3 }).trim(),
+  body('price', 'Price is not valid').isNumeric(),
+  body('img', 'Url is not valid').isURL(),
 ];

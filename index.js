@@ -7,6 +7,8 @@ const exphbs = require('express-handlebars');
 const session = require('express-session');
 const MongoStore = require('connect-mongodb-session')(session);
 const mongoose = require('mongoose');
+const helmet = require('helmet');
+const compression = require('compression');
 const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access');
 const errorHandler = require('./middleware/error');
 const fileMiddleware = require('./middleware/file');
@@ -58,6 +60,8 @@ app.use(fileMiddleware.single('avatar'));
 
 app.use(csurf());
 app.use(connectFlash());
+app.use(helmet());
+app.use(compression());
 
 app.use(variablesMiddleware);
 app.use(userMiddleware);
@@ -70,7 +74,7 @@ app.use('/orders', ordersRoute);
 app.use('/auth', authRoute);
 app.use('/profile', profileRoute);
 
-app.use (errorHandler);
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 8000;
 

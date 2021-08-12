@@ -25,7 +25,7 @@ router.post('/', auth, courseValidators, async (req, res) => {
         price: req.body.price,
         img: req.body.img,
         userId: req.user._id,
-      }
+      },
     });
   }
 
